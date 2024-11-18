@@ -39,10 +39,65 @@ Celem projektu jest stworzenie i wdrożenie aplikacji webowej na platformie Azur
 9. Automatyzacja:
    Użycie ARM Templates, Bicep lub Terraform do automatycznego wdrażania infrastruktury.
 
-## Zasoby
+## Zasoby (to del)
 
 - https://github.com/Azure-Samples/todo-csharp-cosmos-sql (hłehłe)
 - https://learn.microsoft.com/en-us/dotnet/aspire/
 - https://github.com/dotnet/aspire-samples/tree/main
 - https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/
 - generowanie bicep https://learn.microsoft.com/en-us/dotnet/aspire/deployment/azure/aca-deployment-azd-in-depth?tabs=macos#generate-bicep-from-net-aspire-project-model
+
+## Zasoby
+
+- instalacja azure CLI https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli
+
+## Uruchomienie
+
+### Ręczny deploy
+
+```
+az deployment sub create --name laba-final --template-file .\infra\main.bicep --location westeurope
+```
+
+api:
+
+```
+dotnet publish src/api/Laba.Todo.csproj -c Release -o ./publish
+```
+
+spakowanie api
+
+```
+cd publish
+# bash
+zip -r ../publish.zip
+# pwsh
+Compress-Archive -Path * -DestinationPath ..\publish.zip
+```
+
+```
+cd publish
+zip -r ../publish.zip
+Compress-Archive -Path * -DestinationPath ..\publish.zip
+az webapp deploy --name labafinal-api --resource-group labafinal-rg --src-path ./publish
+```
+
+web ?? (nie znajduję dobrego opisu poza ręcznym wgraniem):
+
+```
+cd src/web
+npm install
+npm run build
+```
+
+analogicznie pakowanie
+
+### Github Actions
+
+Aplikacja jest wdrażana za pomocą Github Actions.
+
+#### Konfiguracja Sekretów GitHub
+
+Dodaj następujące sekrety w repozytorium GitHub:
+
+- `AZURE_CREDENTIALS`: JSON z danymi logowania do Azure (utworzony za pomocą `az ad sp create-for-rbac`).

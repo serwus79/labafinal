@@ -1,0 +1,72 @@
+name: Deploy API and Vue App to Azure
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repo
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Login to Azure
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Install Azure CLI Bicep module
+      - name: Install Bicep CLI
+        run: |
+          az bicep install
+          az bicep upgrade
+
+      # Deploy infrastructure (Bicep)
+      - name: Deploy Infrastructure
+        run: |
+          az deployment sub create \
+            --name "laba-final" \
+            --location "westeurope" \
+            --template-file ./infra/main.bicep
+
+      # Set output variables for API and Web App URLs
+      - name: Get Deployment Outputs
+        id: outputs
+        run: |
+          API_BASE_URL=$(az deployment sub show \
+            --name "infrastructure-deployment" \
+            --query "properties.outputs.API_BASE_URL.value" -o tsv)
+          APP_WEB_BASE_URL=$(az deployment sub show \
+            --name "infrastructure-deployment" \
+            --query "properties.outputs.APP_WEB_BASE_URL.value" -o tsv)
+
+          echo "API_BASE_URL=$API_BASE_URL" >> $GITHUB_ENV
+          echo "APP_WEB_BASE_URL=$APP_WEB_BASE_URL" >> $GITHUB_ENV
+
+      # Build and publish .NET API
+      - name: Publish .NET API
+        run: |
+          dotnet publish src/api/Api.csproj -c Release -o ./publish
+          az webapp deploy --name ${{ secrets.AZURE_API_APP_NAME }} \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --src-path ./publish
+
+      # Build Vue app
+      - name: Build Vue App
+        run: |
+          cd src/web
+          echo "VITE_API_URL=$API_BASE_URL" > .env.production
+          npm install
+          npm run build
+
+      # Deploy Vue app to Azure Static Web Apps
+      - name: Deploy Vue App
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          app_location: "src/web/dist"
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}

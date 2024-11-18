@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 
+import { apiUrl } from './main';
+
 const message = ref('');
 
 onMounted(async () => {
-  const response = await fetch('http://localhost:5000/api/message');
+  const response = await fetch(`${apiUrl}/api/message`);
   const data = await response.json();
   message.value = data.message;
 });

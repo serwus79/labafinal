@@ -11,9 +11,6 @@
     "principalId": {
       "value": "${AZURE_PRINCIPAL_ID}"
     },
-    "useAPIM": {
-      "value": "${USE_APIM=false}"
-    },
     "apimSku": {
       "value": "${APIM_SKU=Consumption}"
     }
