@@ -16,6 +16,7 @@
     "vue": "^3.5.12"
   },
   "devDependencies": {
+    "@azure/static-web-apps-cli": "^2.0.1",
     "@tsconfig/node22": "^22.0.0",
     "@types/node": "^22.9.0",
     "@vitejs/plugin-vue": "^5.1.4",

@@ -82,15 +82,20 @@ Compress-Archive -Path * -DestinationPath ..\publish.zip
 az webapp deploy --name labafinal-api --resource-group labafinal-rg --src-path ./publish
 ```
 
-web ?? (nie znajduję dobrego opisu poza ręcznym wgraniem):
+web:
+
+instalacja Azure Static Web Apps CLI (SWA)
+
+https://learn.microsoft.com/en-us/azure/static-web-apps/deploy-web-framework?source=recommendations&tabs=bash&pivots=vanilla-js#configure-for-deployment
 
 ```
 cd src/web
 npm install
 npm run build
+npm install -D @azure/static-web-apps-cli
+npx swa build
+npx swa deploy --env production
 ```
-
-analogicznie pakowanie
 
 ### Github Actions
 
