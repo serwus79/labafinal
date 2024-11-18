@@ -70,7 +70,7 @@ dotnet workload install aspire
 Utworzenie aplikacji
 
 ```bash
-dotnet new aspire-starter --use-redis-cache --output LabaToDo`
+dotnet new aspire-starter --use-redis-cache -n Laba.ToDo -f net9.0 -o .
 ```
 
 _// TODO: kodowanie aplikacji_
