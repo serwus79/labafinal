@@ -46,14 +46,6 @@ Celem projektu jest stworzenie i wdrożenie aplikacji webowej na platformie Azur
 9. Automatyzacja:
    Użycie ARM Templates, Bicep lub Terraform do automatycznego wdrażania infrastruktury.
 
-## Zasoby (to del)
-
-- https://github.com/Azure-Samples/todo-csharp-cosmos-sql (hłehłe)
-- https://learn.microsoft.com/en-us/dotnet/aspire/
-- https://github.com/dotnet/aspire-samples/tree/main
-- https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/
-- generowanie bicep https://learn.microsoft.com/en-us/dotnet/aspire/deployment/azure/aca-deployment-azd-in-depth?tabs=macos#generate-bicep-from-net-aspire-project-model
-
 ## Zasoby
 
 - instalacja azure CLI https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli
