@@ -10,6 +10,7 @@ obj/
 *.vscode/*
 .env
 
+
 # Logs
 *.log
 logs/
@@ -75,3 +76,4 @@ yarn.lock
 pnpm-lock.yaml
 
 .env.*
+!.env.example

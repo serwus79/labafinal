@@ -1,10 +1,17 @@
-# labafinal
-
-Projekt końcowy laba
-
 # Projekt końcowy
 
 Termin: 19.11 23:59
+
+## Short
+
+Repozytorium: https://github.com/serwus79/labafinal
+
+Zawartość:
+
+- `.github` - konfiguracja publikacji _częściowo/TODO_
+- `infra` - pliki bicep potrzebne do uruchomienia infrastruktury (do posprzątania, dużo nadmiarowych rzeczy)
+- `src\api` - aplikacja .net core - _częściowo/TODO_ - brak połączenia z bazą, jest jeden endpoint współpracujący z front
+- `src\web` - aplikacja vue - _częściowo/TODO_ - po połączona z api, pozwala odczytać wartość
 
 ## Projekt:
 
