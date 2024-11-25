@@ -55,9 +55,9 @@ module api './app/api.bicep' = {
     keyVaultName: keyVault.outputs.name
     allowedOrigins: [web.outputs.SERVICE_WEB_URI]
     appSettings: {
-      // AZURE_COSMOS_CONNECTION_STRING_KEY: cosmos.outputs.connectionStringKey
-      // AZURE_COSMOS_DATABASE_NAME: cosmos.outputs.databaseName
-      // AZURE_COSMOS_ENDPOINT: cosmos.outputs.endpoint
+      AZURE_COSMOS_CONNECTION_STRING_KEY: cosmos.outputs.connectionStringKey
+      AZURE_COSMOS_DATABASE_NAME: cosmos.outputs.databaseName
+      AZURE_COSMOS_ENDPOINT: cosmos.outputs.endpoint
       API_ALLOW_ORIGINS: web.outputs.SERVICE_WEB_URI
     }
   }
@@ -74,39 +74,39 @@ module apiKeyVaultAccess './core/security/keyvault-access.bicep' = {
 }
 
 // Give the API the role to access Cosmos
-// module apiCosmosSqlRoleAssign './core/database/cosmos/sql/cosmos-sql-role-assign.bicep' = {
-//   name: 'api-cosmos-access'
-//   scope: rg
-//   params: {
-//     accountName: cosmos.outputs.accountName
-//     roleDefinitionId: cosmos.outputs.roleDefinitionId
-//     principalId: api.outputs.SERVICE_API_IDENTITY_PRINCIPAL_ID
-//   }
-// }
+module apiCosmosSqlRoleAssign './core/database/cosmos/sql/cosmos-sql-role-assign.bicep' = {
+  name: 'api-cosmos-access'
+  scope: rg
+  params: {
+    accountName: cosmos.outputs.accountName
+    roleDefinitionId: cosmos.outputs.roleDefinitionId
+    principalId: api.outputs.SERVICE_API_IDENTITY_PRINCIPAL_ID
+  }
+}
 
 // Give the API the role to access Cosmos
-// module userComsosSqlRoleAssign './core/database/cosmos/sql/cosmos-sql-role-assign.bicep' = if (principalId != '') {
-//   name: 'user-cosmos-access'
-//   scope: rg
-//   params: {
-//     accountName: cosmos.outputs.accountName
-//     roleDefinitionId: cosmos.outputs.roleDefinitionId
-//     principalId: principalId
-//   }
-// }
+module userComsosSqlRoleAssign './core/database/cosmos/sql/cosmos-sql-role-assign.bicep' = if (principalId != '') {
+  name: 'user-cosmos-access'
+  scope: rg
+  params: {
+    accountName: cosmos.outputs.accountName
+    roleDefinitionId: cosmos.outputs.roleDefinitionId
+    principalId: principalId
+  }
+}
 
 // The application database
-// module cosmos './app/db.bicep' = {
-//   name: 'cosmos'
-//   scope: rg
-//   params: {
-//     accountName: !empty(cosmosAccountName) ? cosmosAccountName : '${abbrs.documentDBDatabaseAccounts}${resourceToken}'
-//     databaseName: cosmosDatabaseName
-//     location: location
-//     tags: tags
-//     keyVaultName: keyVault.outputs.name
-//   }
-// }
+module cosmos './app/db.bicep' = {
+  name: 'cosmos'
+  scope: rg
+  params: {
+    accountName: !empty(cosmosAccountName) ? cosmosAccountName : '${abbrs.documentDBDatabaseAccounts}${resourceToken}'
+    databaseName: cosmosDatabaseName
+    location: location
+    tags: tags
+    keyVaultName: keyVault.outputs.name
+  }
+}
 
 // Create an App Service Plan to group applications under the same payment plan and SKU
 module appServicePlan './core/host/appserviceplan.bicep' = {
@@ -154,9 +154,9 @@ module monitoring './core/monitor/monitoring.bicep' = {
 }
 
 // Data outputs
-// output AZURE_COSMOS_ENDPOINT string = cosmos.outputs.endpoint
-// output AZURE_COSMOS_CONNECTION_STRING_KEY string = cosmos.outputs.connectionStringKey
-// output AZURE_COSMOS_DATABASE_NAME string = cosmos.outputs.databaseName
+output AZURE_COSMOS_ENDPOINT string = cosmos.outputs.endpoint
+output AZURE_COSMOS_CONNECTION_STRING_KEY string = cosmos.outputs.connectionStringKey
+output AZURE_COSMOS_DATABASE_NAME string = cosmos.outputs.databaseName
 
 // App outputs
 output AZURE_RESOURCE_GROUP string = resourceGroupName
